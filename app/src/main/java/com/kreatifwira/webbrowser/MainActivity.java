@@ -17,6 +17,7 @@ public class MainActivity extends Activity {
     EditText address;
     ProgressBar progress;
     LinearLayout root;
+    TextView status;
     String home = "https://www.google.com";
     boolean desktop = false;
 
@@ -34,15 +35,15 @@ public class MainActivity extends Activity {
 
         LinearLayout bar = new LinearLayout(this);
         bar.setGravity(Gravity.CENTER_VERTICAL);
-        bar.setPadding(6,6,6,6);
+        bar.setPadding(4,4,4,4);
 
         String[] buttons = {"‹","›","↻","⌂"};
         for (String s: buttons) {
             Button x = new Button(this);
             x.setText(s);
             x.setTextSize(18);
-            x.setMinWidth(48);
-            bar.addView(x, new LinearLayout.LayoutParams(48,52));
+            x.setMinWidth(46);
+            bar.addView(x, new LinearLayout.LayoutParams(46,52));
             if (s.equals("‹")) x.setOnClickListener(v -> { if(web.canGoBack()) web.goBack(); });
             if (s.equals("›")) x.setOnClickListener(v -> { if(web.canGoForward()) web.goForward(); });
             if (s.equals("↻")) x.setOnClickListener(v -> web.reload());
@@ -55,26 +56,36 @@ public class MainActivity extends Activity {
         address.setTextColor(Color.WHITE);
         address.setHintTextColor(0xff9ca3af);
         address.setBackgroundColor(0xff171d26);
-        address.setPadding(18,0,10,0);
+        address.setPadding(14,0,10,0);
         address.setImeOptions(EditorInfo.IME_ACTION_GO);
         address.setInputType(33);
-        address.setOnEditorActionListener((v,id,e)->{ if(id==EditorInfo.IME_ACTION_GO){open(address.getText().toString()); return true;} return false; });
+        address.setOnEditorActionListener((v,id,e)->{
+            if(id==EditorInfo.IME_ACTION_GO){ open(address.getText().toString()); return true; }
+            return false;
+        });
         bar.addView(address,new LinearLayout.LayoutParams(0,52,1));
 
         Button menu = new Button(this);
         menu.setText("⋮");
         menu.setTextSize(20);
-        menu.setMinWidth(48);
-        bar.addView(menu,new LinearLayout.LayoutParams(48,52));
+        menu.setMinWidth(46);
+        bar.addView(menu,new LinearLayout.LayoutParams(46,52));
         menu.setOnClickListener(v -> showMenu(menu));
 
         progress = new ProgressBar(this,null,android.R.attr.progressBarStyleHorizontal);
         progress.setMax(100);
         progress.setVisibility(View.GONE);
 
+        status = new TextView(this);
+        status.setTextColor(0xffcbd5e1);
+        status.setTextSize(12);
+        status.setPadding(12,4,12,4);
+        status.setVisibility(View.GONE);
+
         web = new WebView(this);
         root.addView(bar);
         root.addView(progress,new LinearLayout.LayoutParams(-1,3));
+        root.addView(status,new LinearLayout.LayoutParams(-1,30));
         root.addView(web,new LinearLayout.LayoutParams(-1,0,1));
         setContentView(root);
     }
@@ -87,28 +98,89 @@ public class MainActivity extends Activity {
         s.setSupportZoom(true);
         s.setBuiltInZoomControls(false);
         s.setDisplayZoomControls(false);
-        s.setLoadWithOverviewMode(true);
+        s.setLoadWithOverviewMode(false);
         s.setUseWideViewPort(true);
         s.setMediaPlaybackRequiresUserGesture(false);
         s.setJavaScriptCanOpenWindowsAutomatically(true);
-        CookieManager.getInstance().setAcceptCookie(true);
-        CookieManager.getInstance().setAcceptThirdPartyCookies(web,true);
+        s.setSupportMultipleWindows(true);
+        s.setAllowFileAccess(true);
+        s.setAllowContentAccess(true);
+
+        CookieManager cm=CookieManager.getInstance();
+        cm.setAcceptCookie(true);
+        cm.setAcceptThirdPartyCookies(web,true);
 
         web.setWebViewClient(new WebViewClient(){
             @Override public boolean shouldOverrideUrlLoading(WebView v,String u){
+                if(u==null) return false;
                 if(u.startsWith("http://")||u.startsWith("https://")) return false;
                 try { startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse(u))); } catch(Exception ignored){}
                 return true;
             }
-            @Override public void onPageStarted(WebView v,String u,Bitmap b){ address.setText(u); progress.setVisibility(View.VISIBLE); }
-            @Override public void onPageFinished(WebView v,String u){ address.setText(u); progress.setVisibility(View.GONE); }
+
+            @Override public void onPageStarted(WebView v,String u,Bitmap b){
+                address.setText(u);
+                progress.setVisibility(View.VISIBLE);
+                status.setVisibility(View.GONE);
+            }
+
+            @Override public void onPageFinished(WebView v,String u){
+                address.setText(u);
+                progress.setVisibility(View.GONE);
+                status.setVisibility(View.GONE);
+                CookieManager.getInstance().flush();
+            }
+
+            @Override public void onReceivedError(WebView v,WebResourceRequest r,WebResourceError e){
+                if(r.isForMainFrame()) showError("Halaman gagal dimuat: "+e.getDescription());
+            }
+
+            @Override public void onReceivedHttpError(WebView v,WebResourceRequest r,WebResourceResponse e){
+                if(r.isForMainFrame() && e.getStatusCode() >= 400)
+                    showError("Server mengembalikan HTTP "+e.getStatusCode());
+            }
+
+            @Override public void onReceivedSslError(WebView v,SslErrorHandler h,android.net.http.SslError e){
+                h.cancel();
+                showError("Koneksi HTTPS tidak dapat diverifikasi.");
+            }
         });
+
         web.setWebChromeClient(new WebChromeClient(){
-            @Override public void onProgressChanged(WebView v,int p){ progress.setProgress(p); }
+            @Override public void onProgressChanged(WebView v,int p){
+                progress.setProgress(p);
+                if(p>=100) progress.setVisibility(View.GONE);
+                else progress.setVisibility(View.VISIBLE);
+            }
+
+            @Override public boolean onCreateWindow(WebView view, boolean dialog, boolean userGesture, android.os.Message resultMsg){
+                WebView.HitTestResult hit=view.getHitTestResult();
+                String url=hit!=null ? hit.getExtra() : null;
+                if(url!=null && (url.startsWith("http://")||url.startsWith("https://"))) {
+                    open(url);
+                    return false;
+                }
+                return false;
+            }
+
+            @Override public void onReceivedTitle(WebView view,String title){
+                if(title!=null && !title.isEmpty()) setTitle(title);
+            }
         });
+
         web.setDownloadListener((url,userAgent,contentDisposition,mimeType,contentLength)->{
-            try { startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse(url))); } catch(Exception ignored){}
+            try {
+                Intent i=new Intent(Intent.ACTION_VIEW,Uri.parse(url));
+                startActivity(i);
+            } catch(Exception ignored) {
+                showError("Tidak dapat membuka file.");
+            }
         });
+    }
+
+    void showError(String message) {
+        status.setText(message);
+        status.setVisibility(View.VISIBLE);
     }
 
     void open(String raw) {
@@ -119,6 +191,7 @@ public class MainActivity extends Activity {
             if(q.contains(" ") || !q.contains(".")) q="https://www.google.com/search?q="+Uri.encode(q);
             else q="https://"+q;
         }
+        address.setText(q);
         web.loadUrl(q);
     }
 
@@ -132,11 +205,14 @@ public class MainActivity extends Activity {
             String t=item.getTitle().toString();
             if(t.equals("Mode desktop")){
                 desktop=!desktop;
-                String ua=desktop ? "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/154 Safari/537.36"
-                                   : WebSettings.getDefaultUserAgent(this);
-                web.getSettings().setUserAgentString(ua); web.reload();
+                String ua=desktop
+                    ? "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/154 Safari/537.36"
+                    : WebSettings.getDefaultUserAgent(this);
+                web.getSettings().setUserAgentString(ua);
+                web.reload();
             } else if(t.equals("Salin URL")){
-                ((android.content.ClipboardManager)getSystemService(CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText("URL",web.getUrl()==null?"":web.getUrl()));
+                ((android.content.ClipboardManager)getSystemService(CLIPBOARD_SERVICE))
+                    .setPrimaryClip(ClipData.newPlainText("URL",web.getUrl()==null?"":web.getUrl()));
             } else if(t.equals("Buka di browser HP")){
                 try { startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse(web.getUrl()))); } catch(Exception ignored){}
             } else if(t.equals("Beranda")) open(home);
