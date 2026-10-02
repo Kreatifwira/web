@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proxy Browser</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand"><div class="brand-icon">🌐</div><div><h1>Proxy Browser</h1><span>Single Tab Browser</span></div></div>
+    <button id="settingsBtn" class="icon-btn" title="Pengaturan">⚙</button>
+  </header>
+
+  <section class="browser-bar">
+    <button id="backBtn" class="nav-btn">←</button>
+    <button id="forwardBtn" class="nav-btn">→</button>
+    <button id="reloadBtn" class="nav-btn">↻</button>
+    <form id="urlForm" class="url-form">
+      <span class="lock-icon">🔒</span>
+      <input type="text" id="urlInput" placeholder="Masukkan URL..." autocomplete="off" value="https://example.com">
+      <button type="submit" class="go-btn">GO</button>
+    </form>
+  </section>
+
+  <main class="browser-container">
+    <div id="welcomeScreen" class="welcome">
+      <div class="welcome-icon">🌐</div>
+      <h2>Proxy Browser</h2>
+      <p>Masukkan alamat website pada address bar untuk mulai browsing.</p>
+      <div class="quick-links">
+        <button data-url="https://example.com">Example</button>
+        <button data-url="https://www.google.com">Google</button>
+        <button data-url="https://www.wikipedia.org">Wikipedia</button>
+      </div>
+    </div>
+    <iframe id="browserFrame" title="Browser" src="about:blank" sandbox="allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-presentation allow-same-origin allow-scripts"></iframe>
+    <div id="loading" class="loading"><div class="spinner"></div><span>Memuat...</span></div>
+  </main>
+
+  <aside id="proxyPanel" class="proxy-panel">
+    <div class="panel-header"><div><h2>Proxy</h2><p>Konfigurasi proxy browser</p></div><button id="closePanelBtn" class="close-btn">×</button></div>
+    <div class="proxy-status"><span id="statusDot" class="status-dot"></span><div><strong id="proxyStatus">Proxy belum dikonfigurasi</strong><small id="proxyStatusText">Masukkan host dan port proxy.</small></div></div>
+    <div class="form-group"><label for="proxyType">Tipe Proxy</label><select id="proxyType"><option value="http">HTTP</option><option value="https">HTTPS</option><option value="socks4">SOCKS4</option><option value="socks5">SOCKS5</option></select></div>
+    <div class="form-row"><div class="form-group"><label for="proxyHost">Host / IP</label><input type="text" id="proxyHost" placeholder="127.0.0.1"></div><div class="form-group"><label for="proxyPort">Port</label><input type="number" id="proxyPort" placeholder="8080" min="1" max="65535"></div></div>
+    <div class="form-group"><label for="proxyUsername">Username <span>(opsional)</span></label><input type="text" id="proxyUsername" placeholder="Username"></div>
+    <div class="form-group"><label for="proxyPassword">Password <span>(opsional)</span></label><input type="password" id="proxyPassword" placeholder="Password"></div>
+    <div class="proxy-actions"><button id="testProxyBtn" class="primary-btn">🔍 Test Proxy</button><button id="saveProxyBtn" class="secondary-btn">💾 Simpan</button><button id="clearProxyBtn" class="danger-btn">🗑 Hapus</button></div>
+    <div class="ip-box"><div class="ip-title">IP Publik</div><div id="publicIp">-</div><small>IP yang terdeteksi oleh layanan pemeriksa IP.</small></div>
+    <div class="notice"><strong>Catatan</strong><p>Browser web biasa tidak dapat mengubah proxy Chrome secara langsung. Konfigurasi disimpan secara lokal pada browser. Proxy gateway diperlukan agar koneksi website benar-benar melewati proxy tersebut.</p></div>
+  </aside>
+
+  <footer class="bottom-bar"><div id="connectionStatus">● Ready</div><button id="openProxyBtn">⚙ Proxy</button></footer>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
