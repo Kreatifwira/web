@@ -1,11 +1,11 @@
 {
   "manifest_version": 3,
-  "name": "Solitaire Pattern Recorder V3",
-  "version": "3.0.0",
-  "description": "Mendeteksi pola posisi kartu Solitaire dengan hash visual per zona.",
+  "name": "Solitaire Card Pattern Detector V4",
+  "version": "4.0.0",
+  "description": "Merekam struktur posisi kartu Solitaire dan mendeteksi pola yang pernah disimpan.",
   "permissions": ["storage", "tabs", "activeTab", "notifications"],
   "host_permissions": ["https://1xlite-69967.pro/*"],
-  "action": {"default_title":"Solitaire Pattern Recorder V3","default_popup":"popup.html"},
+  "action": {"default_title":"Solitaire Card Pattern Detector V4","default_popup":"popup.html"},
   "background": {"service_worker":"background.js"},
   "content_scripts": [{"matches":["https://1xlite-69967.pro/*"],"js":["content.js"],"run_at":"document_idle"}]
 }
