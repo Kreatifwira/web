@@ -14,10 +14,16 @@ async function refresh(){
 }
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 $("start").onclick=async()=>{
-  $("start").disabled=true;$("status").textContent="⏳ Memulai rekaman...";
+  const btn=$("start");
+  btn.disabled=true;
+  btn.classList.add("recording");
+  btn.textContent="● SEDANG MEREKAM";
+  btn.style.setProperty("background","#000","important");
+  btn.style.setProperty("color","#fff","important");
+  $("status").textContent="⏳ Memulai rekaman...";
   const r=await send("POPUP_START");
-  $("start").disabled=false;
-  if(!r.ok)alert("Mulai rekam gagal: "+r.error);
+  if(!r.ok){btn.classList.remove("recording");btn.disabled=false;btn.textContent="● MULAI REKAM";btn.style.setProperty("background","#2563eb","important");alert("Mulai rekam gagal: "+r.error);return}
+  $("status").textContent="🔴 Merekam • 0 langkah";
   await refresh();
 };
 $("finish").onclick=async()=>{
@@ -30,3 +36,4 @@ $("threshold").oninput=async e=>{$("tv").textContent=Number(e.target.value).toFi
 $("delay").oninput=async e=>{$("dv").textContent=e.target.value+" ms";save()};
 async function save(){await chrome.storage.local.set({v5settings:{threshold:Number($("threshold").value)/100,delay:Number($("delay").value)}})}
 refresh();
+setInterval(refresh,1000);
