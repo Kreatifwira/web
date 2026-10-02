@@ -1,36 +1,29 @@
 <!doctype html>
 <html lang="id">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b0f14">
-<meta name="description" content="Web Browser ringan dengan tampilan seperti browser HP.">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#202124">
 <link rel="manifest" href="manifest.json">
-<link rel="icon" href="data:,">
-<title>Web Browser</title>
+<title>Browser</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header class="topbar">
-  <button class="icon" id="back">‹</button><button class="icon" id="forward">›</button><button class="icon" id="reload">↻</button>
-  <button class="home" id="home">⌂</button>
-  <form id="navForm" class="address-wrap"><span class="lock">⌕</span><input id="address" autocomplete="url" inputmode="url" placeholder="Telusuri atau masukkan alamat"><button class="go" type="submit">→</button></form>
-  <button class="icon" id="newTab">＋</button><button class="icon" id="menuBtn">⋮</button>
-</header>
-<section class="tabs" id="tabs"></section>
-<main>
-<section id="homePage" class="home-page">
-<div class="brand">WEB<span>BROWSER</span></div><p class="sub">Browser ringan dengan tampilan seperti browser HP.</p>
-<form id="searchForm" class="search-box"><span>⌕</span><input id="searchInput" placeholder="Cari di web" autocomplete="off"><button>→</button></form>
-<div class="quick"><button data-url="https://www.google.com/">Google</button><button data-url="https://www.youtube.com/">YouTube</button><button data-url="https://www.facebook.com/">Facebook</button><button data-url="https://www.wikipedia.org/">Wikipedia</button></div>
-</section>
-<section id="browserPage" class="browser-page hidden">
-<div class="frame-head"><span id="pageTitle">Halaman</span><button id="openDirect">Buka di browser ↗</button></div>
-<div id="browserInfo" class="blocked"><div class="blocked-icon">🌐</div><h2>Halaman dibuka di browser</h2><p>Website eksternal tidak dimuat dengan iframe. Tekan tombol di bawah untuk membukanya langsung di browser HP.</p><button id="blockedOpen">Buka langsung</button></div>
-</section>
+<main class="browser">
+  <header class="toolbar">
+    <button id="back" aria-label="Kembali">‹</button>
+    <button id="forward" aria-label="Maju">›</button>
+    <button id="reload" aria-label="Muat ulang">↻</button>
+    <input id="url" value="https://1xraja.com/id" autocomplete="off" spellcheck="false">
+    <button id="go">Buka</button>
+  </header>
+  <section class="page">
+    <div class="logo">Chrome</div>
+    <h1>Browser langsung</h1>
+    <p>Website tidak dimuat di iframe. Alamat dibuka langsung oleh browser perangkat.</p>
+    <button id="open" class="primary">BUKA 1XRAJA</button>
+  </section>
 </main>
-<div id="menu" class="menu hidden"><button id="copyUrl">Salin URL</button><button id="desktopMode">Mode desktop</button><button id="historyBtn">Riwayat</button><button id="clearHistory">Hapus riwayat</button><button id="installBtn" class="hidden">Pasang aplikasi</button><button id="homeMenu">Beranda</button></div>
-<div id="historyPanel" class="panel hidden"><div class="panel-title"><b>Riwayat</b><button id="closeHistory">×</button></div><div id="historyList"></div></div>
 <script src="app.js"></script>
 </body>
 </html>
