@@ -1,18 +1,16 @@
-const address=document.getElementById("address"),homeScreen=document.getElementById("homeScreen"),webview=document.getElementById("webview"),errorBox=document.getElementById("errorBox"),homeSearch=document.getElementById("homeSearch"),searchForm=document.getElementById("searchForm");let currentUrl="";const homeUrl="https://example.com";
-
-function normalize(value){value=value.trim();if(!value)return homeUrl;if(/^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//.test(value))return value;if(value.includes(" ")||!value.includes("."))return "https://www.google.com/search?q="+encodeURIComponent(value);return "https://"+value}
-function navigate(value){const url=normalize(value);currentUrl=url;address.value=url;homeScreen.style.display="none";errorBox.classList.add("hidden");webview.style.display="block";webview.src=url}
-function go(){navigate(address.value)}
-address.addEventListener("keydown",e=>{if(e.key==="Enter")go()});document.getElementById("go").onclick=go;
-searchForm.addEventListener("submit",e=>{e.preventDefault();navigate(homeSearch.value)});
-document.querySelectorAll(".quick-links button").forEach(b=>b.onclick=()=>navigate(b.dataset.url));
-document.getElementById("home").onclick=()=>{webview.style.display="none";errorBox.classList.add("hidden");homeScreen.style.display="flex";address.value=""};
-document.getElementById("reload").onclick=()=>{if(currentUrl)webview.src=currentUrl};
-document.getElementById("back").onclick=()=>{try{webview.contentWindow.history.back()}catch(e){}};
-document.getElementById("forward").onclick=()=>{try{webview.contentWindow.history.forward()}catch(e){}};
-document.getElementById("openExternal").onclick=()=>{if(currentUrl)window.open(currentUrl,"_blank","noopener,noreferrer")};
-document.getElementById("external").onclick=()=>{if(currentUrl)window.open(currentUrl,"_blank","noopener,noreferrer")};
-document.getElementById("retry").onclick=()=>{if(currentUrl){webview.src="";setTimeout(()=>webview.src=currentUrl,50)}};
-document.getElementById("newTab").onclick=()=>{document.getElementById("home").click();homeSearch.focus()};
-webview.addEventListener("load",()=>{errorBox.classList.add("hidden")});
-webview.addEventListener("error",()=>{webview.style.display="none";errorBox.classList.remove("hidden")});
+const $=id=>document.getElementById(id);let currentUrl="",desktop=false;
+function normalize(v){v=v.trim();if(!v)return"";if(/^[a-z][a-z0-9+.-]*:\/\//i.test(v))return v;if(v.includes(" ")||!v.includes("."))return "https://www.google.com/search?q="+encodeURIComponent(v);return"https://"+v}
+function showHome(){ $("start").style.display="flex";$("page").style.display="none";$("blocked").style.display="none";$("address").value=""}
+function nav(v){const u=normalize(v);if(!u)return;currentUrl=u;$("address").value=u;$("start").style.display="none";$("blocked").style.display="none";$("page").style.display="block";$("page").src=u;localStorage.setItem("lastUrl",u);localStorage.setItem("history",JSON.stringify([u,...JSON.parse(localStorage.getItem("history")||"[]").filter(x=>x!==u)].slice(0,30)))}
+function direct(){if(currentUrl)window.open(currentUrl,"_blank","noopener,noreferrer")}
+function go(){nav($("address").value)}
+$("address").addEventListener("keydown",e=>{if(e.key==="Enter")go()});$("go").onclick=go;$("clear").onclick=()=>{$("address").value="";$("address").focus()};
+$("search").onsubmit=e=>{e.preventDefault();nav($("query").value)};document.querySelectorAll("[data-url]").forEach(x=>x.onclick=()=>nav(x.dataset.url));
+$("home").onclick=showHome;$("addTab").onclick=showHome;$("closeTab").onclick=showHome;$("reload").onclick=()=>{if(currentUrl)$("page").src=currentUrl};$("open").onclick=direct;$("direct").onclick=direct;$("direct2").onclick=direct;$("again").onclick=()=>currentUrl&&nav(currentUrl);
+$("back").onclick=()=>{try{$("page").contentWindow.history.back()}catch(e){}};$("forward").onclick=()=>{try{$("page").contentWindow.history.forward()}catch(e){}};
+function toggle(){ $("menuPanel").classList.toggle("show") }$("more").onclick=toggle;$("menu").onclick=toggle;
+$("copy").onclick=async()=>{if(currentUrl){try{await navigator.clipboard.writeText(currentUrl)}catch(e){}toggle()}};$("desktop").onclick=()=>{desktop=!desktop;$("page").style.minWidth=desktop?"1100px":"0";toggle()};
+$("clearData").onclick=()=>{localStorage.removeItem("history");localStorage.removeItem("lastUrl");toggle()};
+$("page").addEventListener("error",()=>{$("page").style.display="none";$("blocked").style.display="flex"});
+$("page").addEventListener("load",()=>{$("blocked").style.display="none"});
+window.addEventListener("load",()=>{const last=localStorage.getItem("lastUrl");if(last){/* intentionally stay on home */}});
