@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Browser Pattern Recorder</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="toolbar">
+  <button id="back">←</button><button id="forward">→</button><button id="reload">↻</button>
+  <input id="url" value="https://1xlite-69967.pro/id/games/solitaire" spellcheck="false">
+  <button id="go">BUKA</button>
+</header>
+<main>
+  <section class="browser-panel">
+    <webview id="browser" src="https://1xlite-69967.pro/id/games/solitaire" partition="persist:browser" allowpopups></webview>
+  </section>
+  <aside class="side-panel">
+    <div class="brand">PATTERN RECORDER</div>
+    <h2>Pengenal Pola</h2>
+    <p class="muted">Rekam snapshot tampilan browser dan cari pola yang sama.</p>
+    <div id="status" class="status">Siap</div>
+    <div class="actions">
+      <button id="record" class="primary">● RECORD POLA</button>
+      <button id="check">⌕ CEK POLA</button>
+      <button id="save">＋ SIMPAN</button>
+    </div>
+    <div class="stats"><div><span>Rekaman</span><b id="count">0</b></div><div><span>Halaman</span><b id="pageTitle">-</b></div></div>
+    <h3>Database Pola</h3>
+    <div id="list" class="list"></div>
+    <div id="result" class="result">Belum ada pemeriksaan.</div>
+    <button id="clear" class="danger">Hapus semua pola</button>
+  </aside>
+</main>
+<script src="renderer.js"></script>
+</body>
+</html>
