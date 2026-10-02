@@ -1,25 +1,69 @@
 <!doctype html>
-<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#202124"><title>Browser</title><link rel="stylesheet" href="style.css"></head>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0f14">
+<title>Web Browser</title>
+<link rel="stylesheet" href="style.css">
+</head>
 <body>
-<div class="app">
-  <div class="top">
-    <div class="tabbar"><div class="tab active"><span>🌐</span><b>Tab Baru</b><button id="closeTab">×</button></div><button id="addTab" class="round">＋</button><button id="tabsBtn" class="round">▢</button></div>
-    <div class="addressbar">
-      <button id="back">‹</button><button id="forward">›</button>
-      <div class="omnibox"><span id="lock">🔒</span><input id="address" placeholder="Cari atau masukkan alamat" autocomplete="off"><button id="clear">×</button><button id="go">➜</button></div>
-      <button id="menu">⋮</button>
+<header class="topbar">
+  <button class="icon" id="back" aria-label="Kembali">‹</button>
+  <button class="icon" id="forward" aria-label="Maju">›</button>
+  <button class="icon" id="reload" aria-label="Muat ulang">↻</button>
+  <button class="home" id="home">⌂</button>
+  <form id="navForm" class="address-wrap">
+    <span class="lock">⌕</span>
+    <input id="address" autocomplete="url" inputmode="url" placeholder="Telusuri atau masukkan alamat" />
+    <button class="go" type="submit">→</button>
+  </form>
+  <button class="icon" id="newTab" aria-label="Tab baru">＋</button>
+  <button class="icon" id="menuBtn" aria-label="Menu">⋮</button>
+</header>
+
+<section class="tabs" id="tabs"></section>
+
+<main>
+  <section id="homePage" class="home-page">
+    <div class="brand">WEB<span>BROWSER</span></div>
+    <p class="sub">Browser sederhana dengan tampilan seperti browser HP.</p>
+    <form id="searchForm" class="search-box">
+      <span>⌕</span><input id="searchInput" placeholder="Cari di web" autocomplete="off"><button>→</button>
+    </form>
+    <div class="quick">
+      <button data-url="https://www.google.com/">Google</button>
+      <button data-url="https://www.youtube.com/">YouTube</button>
+      <button data-url="https://www.facebook.com/">Facebook</button>
+      <button data-url="https://www.wikipedia.org/">Wikipedia</button>
     </div>
-  </div>
-  <main id="main">
-    <section id="start" class="start">
-      <div class="logo">🌐</div><h1>Browser</h1><p>Cepat. Sederhana. Nyaman di HP.</p>
-      <form id="search"><div class="search"><span>🔍</span><input id="query" placeholder="Cari atau masukkan alamat web"><button>→</button></div></form>
-      <div class="cards"><button data-url="https://example.com">Example</button><button data-url="https://wikipedia.org">Wikipedia</button><button data-url="https://github.com">GitHub</button></div>
-      <div class="info">Untuk situs yang menolak iframe, gunakan menu <b>⋮</b> → <b>Buka langsung</b>.</div>
-    </section>
-    <iframe id="page" allow="fullscreen; autoplay; clipboard-read; clipboard-write"></iframe>
-    <section id="blocked" class="blocked"><div>⚠️</div><h2>Situs tidak dapat ditampilkan</h2><p>Situs ini mungkin melarang pemuatan di dalam iframe.</p><button id="direct">Buka langsung</button><button id="again">Coba lagi</button></section>
-  </main>
-  <nav class="bottom"><button id="home">⌂<small>Beranda</small></button><button id="reload">↻<small>Muat ulang</small></button><button id="open">↗<small>Buka langsung</small></button><button id="more">⋮<small>Menu</small></button></nav>
-</div><div id="menuPanel" class="panel"><button id="direct2">↗ &nbsp; Buka langsung</button><button id="copy">🔗 &nbsp; Salin alamat</button><button id="desktop">🖥️ &nbsp; Tampilan desktop</button><button id="clearData">🗑️ &nbsp; Bersihkan riwayat lokal</button></div>
-<script src="app.js"></script></body></html>
+  </section>
+
+  <section id="browserPage" class="browser-page hidden">
+    <div class="frame-head"><span id="pageTitle">Halaman</span><button id="openDirect">Buka langsung ↗</button></div>
+    <iframe id="webview" title="Browser content" referrerpolicy="no-referrer"></iframe>
+    <div id="blocked" class="blocked hidden">
+      <div class="blocked-icon">🌐</div>
+      <h2>Halaman tidak dapat ditampilkan di sini</h2>
+      <p>Situs ini mungkin melarang tampilan melalui iframe. Anda tetap dapat membukanya langsung di browser HP.</p>
+      <button id="blockedOpen">Buka langsung</button>
+    </div>
+  </section>
+</main>
+
+<div id="menu" class="menu hidden">
+  <button id="copyUrl">Salin URL</button>
+  <button id="desktopMode">Mode desktop</button>
+  <button id="historyBtn">Riwayat</button>
+  <button id="clearHistory">Hapus riwayat</button>
+  <button id="homeMenu">Beranda</button>
+</div>
+
+<div id="historyPanel" class="panel hidden">
+  <div class="panel-title"><b>Riwayat</b><button id="closeHistory">×</button></div>
+  <div id="historyList"></div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
