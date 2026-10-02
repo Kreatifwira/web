@@ -4,6 +4,7 @@ import android.app.*;
 import android.os.*;
 import android.content.*;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.view.*;
 import android.view.inputmethod.EditorInfo;
