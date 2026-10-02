@@ -1,0 +1,10 @@
+(()=>{if(window.__SOLITAIRE_V5__)return;window.__SOLITAIRE_V5__=1;
+const send=(type,data={})=>{try{chrome.runtime.sendMessage({type,...data})}catch(e){}};
+const txt=e=>[e?.innerText,e?.textContent,e?.getAttribute?.("aria-label"),e?.title].filter(Boolean).join(" ").trim().toLowerCase();
+const newGame=e=>/(new game|new deal|play again|permainan baru|main lagi|mulai lagi)/i.test(txt(e));
+let down=null,last=performance.now(),finishAt=0;
+document.addEventListener("pointerdown",e=>{if(e.isPrimary===false)return;if(newGame(e.target)){send("NEW_GAME_REQUESTED");return}down={t:performance.now(),x:e.clientX,y:e.clientY}},true);
+document.addEventListener("pointerup",e=>{if(!down||e.isPrimary===false)return;const d=down;down=null;const now=performance.now(),dx=e.clientX-d.x,dy=e.clientY-d.y,dist=Math.hypot(dx,dy);if(dist>1600)return;send("GAME_ACTION",{action:{kind:dist>=8?"drag":"click",x1:d.x,y1:d.y,x2:e.clientX,y2:e.clientY,duration:Math.max(20,Math.min(3000,now-d.t)),wait:Math.max(40,Math.min(5000,now-last))}});last=now},true);
+document.addEventListener("click",e=>{if(newGame(e.target))send("NEW_GAME_REQUESTED")},true);
+let obsTimer;const scan=()=>{const t=(document.body?.innerText||"").slice(0,30000);if(/you win|you won|congratulations|game complete|victory|menang|selesai|berhasil/i.test(t)&&Date.now()-finishAt>5000){finishAt=Date.now();send("GAME_FINISHED",{source:"page-text"})}};new MutationObserver(()=>{clearTimeout(obsTimer);obsTimer=setTimeout(scan,500)}).observe(document.documentElement,{childList:true,subtree:true,characterData:true});
+send("PAGE_READY",{href:location.href,viewport:{width:innerWidth,height:innerHeight}});})();
