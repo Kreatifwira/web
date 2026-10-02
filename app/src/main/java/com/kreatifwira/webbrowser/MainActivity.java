@@ -103,6 +103,8 @@ public class MainActivity extends Activity {
         s.setMediaPlaybackRequiresUserGesture(false);
         s.setJavaScriptCanOpenWindowsAutomatically(true);
         s.setSupportMultipleWindows(true);
+        // Use a modern mobile-Chrome style UA for better website compatibility.
+        s.setUserAgentString("Mozilla/5.0 (Linux; Android 15) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Mobile Safari/537.36");
         s.setAllowFileAccess(true);
         s.setAllowContentAccess(true);
 
@@ -154,13 +156,12 @@ public class MainActivity extends Activity {
             }
 
             @Override public boolean onCreateWindow(WebView view, boolean dialog, boolean userGesture, android.os.Message resultMsg){
-                WebView.HitTestResult hit=view.getHitTestResult();
-                String url=hit!=null ? hit.getExtra() : null;
-                if(url!=null && (url.startsWith("http://")||url.startsWith("https://"))) {
-                    open(url);
-                    return false;
-                }
-                return false;
+                WebView popup = new WebView(MainActivity.this);
+                configurePopup(popup);
+                WebView.WebViewTransport transport=(WebView.WebViewTransport)resultMsg.obj;
+                transport.setWebView(popup);
+                resultMsg.sendToTarget();
+                return true;
             }
 
             @Override public void onReceivedTitle(WebView view,String title){
@@ -176,6 +177,25 @@ public class MainActivity extends Activity {
                 showError("Tidak dapat membuka file.");
             }
         });
+    }
+
+    void configurePopup(WebView popup) {
+        WebSettings ps=popup.getSettings();
+        ps.setJavaScriptEnabled(true);
+        ps.setDomStorageEnabled(true);
+        ps.setJavaScriptCanOpenWindowsAutomatically(true);
+        ps.setSupportMultipleWindows(true);
+        ps.setUserAgentString(web.getSettings().getUserAgentString());
+        popup.setWebViewClient(new WebViewClient(){
+            @Override public boolean shouldOverrideUrlLoading(WebView v,String url){
+                if(url==null) return true;
+                if(url.startsWith("http://")||url.startsWith("https://")) { web.loadUrl(url); return true; }
+                try { startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse(url))); } catch(Exception ignored) {}
+                return true;
+            }
+            @Override public void onPageStarted(WebView v,String url,Bitmap b){ address.setText(url); }
+        });
+        popup.setWebChromeClient(new WebChromeClient());
     }
 
     void showError(String message) {
