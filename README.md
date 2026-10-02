@@ -1,27 +1,18 @@
-# Solitaire Pattern Recorder V2
+# Solitaire Pattern Recorder V3
 
-Versi browser extension untuk Chrome/Edge.
+Browser extension Chrome/Edge untuk merekam dan membandingkan pola permainan.
 
-## Fitur
-- Berjalan langsung di browser.
-- Login dilakukan sendiri oleh pengguna; extension tidak menerima password atau OTP.
-- RECORD POLA menangkap keadaan visual halaman.
-- SIMPAN POLA menyimpan hash lokal.
-- CEK POLA membandingkan pola sekarang dengan rekaman lama.
-- Toleransi kemiripan 70–98%.
-- Notifikasi browser saat pola cocok.
-- Tidak melakukan auto-click atau auto-play.
+V3 membagi area permainan menjadi 25 zona (5x5). Setiap zona memiliki fingerprint visual sendiri. Saat CEK POLA dijalankan, sistem menghitung kemiripan tiap zona lalu menghasilkan skor keseluruhan. Ini lebih tahan terhadap perubahan kecil di sebagian layar dibanding satu hash untuk seluruh halaman.
 
-## Instalasi
-1. Buka Chrome atau Edge.
-2. Chrome: chrome://extensions
-3. Edge: edge://extensions
-4. Aktifkan Developer mode / Mode pengembang.
-5. Pilih Load unpacked / Muat yang belum dikemas.
-6. Pilih folder repository ini.
-7. Buka https://1xlite-69967.pro/id/games/solitaire.
-8. Login sendiri jika diperlukan.
-9. Klik ikon Solitaire Pattern Recorder V2.
+Instal:
+1. chrome://extensions atau edge://extensions
+2. Developer mode
+3. Load unpacked
+4. Pilih folder repository
+5. Buka halaman Solitaire
+6. Login sendiri bila diperlukan
+7. Klik extension dan gunakan RECORD POLA → SIMPAN POLA → CEK POLA.
 
-## Catatan
-V2 menggunakan perceptual-style binary hash dari area layar. Ini lebih toleran daripada fingerprint PNG persis, tetapi belum mengenali nilai kartu secara semantik. Tahap berikutnya dapat dibuat menjadi pengenal posisi dan identitas kartu.
+V3 tidak melakukan auto-click/auto-play dan tidak membutuhkan password pengguna.
+
+Catatan: V3 adalah pengenal visual berbasis zona, bukan OCR/identifikasi nilai kartu. Tahap berikutnya dapat menambahkan deteksi bentuk kartu dan OCR bila diperlukan.
