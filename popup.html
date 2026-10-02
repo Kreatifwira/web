@@ -1,1 +1,23 @@
-<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Solitaire Pattern Recorder V3</title><link rel="stylesheet" href="popup.css"></head><body><header><div class="logo">SOLITAIRE</div><div class="title">Card Pattern Detector <span>V3</span></div></header><div id="status" class="status">Siap.</div><div class="buttons"><button id="record" class="primary">● RECORD POLA</button><button id="save">＋ SIMPAN POLA</button><button id="check">⌕ CEK POLA</button></div><div class="options"><label>Area papan<select id="crop"><option value="center">Tengah — rekomendasi</option><option value="full">Seluruh layar</option></select></label><label>Toleransi <b id="tolValue">88%</b><input id="tolerance" type="range" min="75" max="98" value="88"></label></div><div class="stats"><div><small>Pola</small><b id="count">0</b></div><div><small>Kemiripan</small><b id="match">-</b></div></div><h3>Zona kartu</h3><div class="legend">V3 membagi papan menjadi 25 zona dan membandingkan pola tiap zona.</div><h3>Rekaman</h3><div id="list" class="list"></div><button id="clear" class="danger">Hapus semua pola</button><script src="popup.js"></script></body></html>
+<!doctype html>
+<html lang="id">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Solitaire Card Detector V4</title><link rel="stylesheet" href="popup.css"></head>
+<body>
+<header><div class="logo">SOLITAIRE</div><div class="title">Card Pattern Detector <span>V4</span></div><div class="sub">Rekam posisi kartu • deteksi pola • tanpa auto-click</div></header>
+<div id="status" class="status">Siap. Buka halaman Solitaire terlebih dahulu.</div>
+<div class="buttons"><button id="record" class="primary">● REKAM POLA</button><button id="save">＋ SIMPAN POLA</button><button id="check">⌕ CEK POLA SEKARANG</button></div>
+<div class="stats"><div><small>Pola tersimpan</small><b id="count">0</b></div><div><small>Kemiripan</small><b id="match">-</b></div></div>
+<h3>Area papan</h3>
+<div class="grid">
+<label>Kiri %<input id="left" type="number" min="0" max="50" step="1"></label>
+<label>Atas %<input id="top" type="number" min="0" max="50" step="1"></label>
+<label>Lebar %<input id="width" type="number" min="20" max="100" step="1"></label>
+<label>Tinggi %<input id="height" type="number" min="20" max="100" step="1"></label>
+</div>
+<div class="hint">Default dibuat untuk papan Solitaire yang berada di tengah layar. Jika posisi kartu berbeda, ubah 4 angka ini lalu coba REKAM lagi.</div>
+<h3>Deteksi</h3>
+<label class="range">Toleransi <b id="tolValue">90%</b><input id="tolerance" type="range" min="70" max="98" value="90"></label>
+<div class="hint">V4 membaca 13 slot: stock, waste, 4 foundation, dan 7 kolom tableau. Untuk tableau, struktur tumpukan juga ikut dicatat.</div>
+<h3>Rekaman</h3><div id="list" class="list"></div>
+<button id="clear" class="danger">Hapus semua pola</button>
+<script src="popup.js"></script>
+</body></html>
