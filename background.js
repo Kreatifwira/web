@@ -1,2 +1,35 @@
-chrome.runtime.onMessage.addListener((msg,sender,sendResponse)=>{if(msg.type==="CAPTURE"){chrome.tabs.captureVisibleTab(sender.tab?.windowId,{format:"png"},dataUrl=>{if(chrome.runtime.lastError){sendResponse({error:chrome.runtime.lastError.message});return}cropAndHash(dataUrl,msg.crop||"center").then(sendResponse).catch(e=>sendResponse({error:e.message}))});return true}if(msg.type==="NOTIFY"){chrome.notifications.create({type:"basic",iconUrl:"icon.png",title:msg.title,message:msg.message})}});
-async function cropAndHash(dataUrl,mode){const blob=await(await fetch(dataUrl)).blob();const bitmap=await createImageBitmap(blob);const size=128,canvas=new OffscreenCanvas(size,size),ctx=canvas.getContext("2d");let sx=0,sy=0,sw=bitmap.width,sh=bitmap.height;if(mode==="center"){sw=Math.floor(bitmap.width*.72);sh=Math.floor(bitmap.height*.72);sx=Math.floor((bitmap.width-sw)/2);sy=Math.floor((bitmap.height-sh)/2)}ctx.drawImage(bitmap,sx,sy,sw,sh,0,0,size,size);const data=ctx.getImageData(0,0,size,size).data,small=[],cell=8,n=16;for(let y=0;y<n;y++)for(let x=0;x<n;x++){let sum=0;for(let yy=0;yy<cell;yy++)for(let xx=0;xx<cell;xx++){const i=((y*cell+yy)*size+(x*cell+xx))*4;sum+=(data[i]*299+data[i+1]*587+data[i+2]*114)/1000}small.push(sum/(cell*cell))}const avg=small.reduce((a,b)=>a+b,0)/small.length;return{hash:small.map(v=>v>=avg?"1":"0").join(""),width:bitmap.width,height:bitmap.height,title:"Solitaire",url:""}}
+chrome.runtime.onMessage.addListener((msg,sender,sendResponse)=>{
+  if(msg.type==="CAPTURE"){
+    chrome.tabs.query({active:true,currentWindow:true},tabs=>{
+      const tab=tabs[0];
+      if(!tab){sendResponse({error:"Tab aktif tidak ditemukan."});return}
+      chrome.tabs.captureVisibleTab(tab.windowId,{format:"png"},dataUrl=>{
+        if(chrome.runtime.lastError){sendResponse({error:chrome.runtime.lastError.message});return}
+        cropAndHash(dataUrl,msg.crop||"center").then(sendResponse).catch(e=>sendResponse({error:e.message}))
+      })
+    });
+    return true
+  }
+  if(msg.type==="NOTIFY"){
+    chrome.notifications.create({type:"basic",title:msg.title,message:msg.message})
+  }
+});
+async function cropAndHash(dataUrl,mode){
+  const blob=await(await fetch(dataUrl)).blob();
+  const bitmap=await createImageBitmap(blob);
+  const size=128,canvas=new OffscreenCanvas(size,size),ctx=canvas.getContext("2d");
+  let sx=0,sy=0,sw=bitmap.width,sh=bitmap.height;
+  if(mode==="center"){sw=Math.floor(bitmap.width*.72);sh=Math.floor(bitmap.height*.72);sx=Math.floor((bitmap.width-sw)/2);sy=Math.floor((bitmap.height-sh)/2)}
+  ctx.drawImage(bitmap,sx,sy,sw,sh,0,0,size,size);
+  const data=ctx.getImageData(0,0,size,size).data,small=[],cell=8,n=16;
+  for(let y=0;y<n;y++)for(let x=0;x<n;x++){
+    let sum=0;
+    for(let yy=0;yy<cell;yy++)for(let xx=0;xx<cell;xx++){
+      const i=((y*cell+yy)*size+(x*cell+xx))*4;
+      sum+=(data[i]*299+data[i+1]*587+data[i+2]*114)/1000
+    }
+    small.push(sum/(cell*cell))
+  }
+  const avg=small.reduce((a,b)=>a+b,0)/small.length;
+  return {hash:small.map(v=>v>=avg?"1":"0").join(""),width:bitmap.width,height:bitmap.height,title:"Solitaire",url:""}
+}
