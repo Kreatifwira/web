@@ -1,1 +1,1 @@
-chrome.runtime.onMessage.addListener((msg,sender,sendResponse)=>{if(msg.type==="STATUS")sendResponse({active:true})});
+// Detector V3 hanya membaca tampilan tab melalui API captureVisibleTab. Tidak mengubah permainan.
