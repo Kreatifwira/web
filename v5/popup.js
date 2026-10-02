@@ -7,6 +7,7 @@ async function refresh(){
   if(!x)$("status").textContent="Buka halaman Solitaire target.";
   else if(x.match)$("status").textContent="🟢 Deal cocok • "+(x.match.score*100).toFixed(1)+"%";
   else $("status").textContent=(x.recording?"🔴 Merekam • ":"Siap • ")+(x.actionCount||0)+" langkah";
+  const rec=!!x?.recording; const btn=$("start"); btn.classList.toggle("recording",rec); btn.disabled=rec; btn.textContent=rec?"● SEDANG MEREKAM":"● MULAI REKAM"; btn.style.backgroundColor=rec?"#000":"#2563eb"; btn.style.color="#fff";
   $("list").innerHTML=(l?.recordings||[]).map(r=>'<div class="item"><b>'+esc(r.name)+'</b><div class="meta">'+(r.actions?.length||0)+' langkah • '+new Date(r.createdAt).toLocaleString()+'</div><button data-p="'+r.id+'">▶ JALANKAN</button><button class="danger" data-d="'+r.id+'">HAPUS</button></div>').join("")||'<div class="meta">Belum ada rekaman.</div>';
   document.querySelectorAll("[data-p]").forEach(b=>b.onclick=async()=>{const r=await send("POPUP_REPLAY",{recordingId:b.dataset.p});if(!r.ok)alert("Replay: "+r.error);else window.close()});
   document.querySelectorAll("[data-d]").forEach(b=>b.onclick=async()=>{const r=await send("POPUP_DELETE",{recordingId:b.dataset.d});if(!r.ok)alert(r.error);else refresh()});
