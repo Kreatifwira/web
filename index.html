@@ -4,66 +4,34 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b0f14">
+<meta name="description" content="Web Browser ringan dengan tampilan seperti browser HP.">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="data:,">
 <title>Web Browser</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header class="topbar">
-  <button class="icon" id="back" aria-label="Kembali">‹</button>
-  <button class="icon" id="forward" aria-label="Maju">›</button>
-  <button class="icon" id="reload" aria-label="Muat ulang">↻</button>
+  <button class="icon" id="back">‹</button><button class="icon" id="forward">›</button><button class="icon" id="reload">↻</button>
   <button class="home" id="home">⌂</button>
-  <form id="navForm" class="address-wrap">
-    <span class="lock">⌕</span>
-    <input id="address" autocomplete="url" inputmode="url" placeholder="Telusuri atau masukkan alamat" />
-    <button class="go" type="submit">→</button>
-  </form>
-  <button class="icon" id="newTab" aria-label="Tab baru">＋</button>
-  <button class="icon" id="menuBtn" aria-label="Menu">⋮</button>
+  <form id="navForm" class="address-wrap"><span class="lock">⌕</span><input id="address" autocomplete="url" inputmode="url" placeholder="Telusuri atau masukkan alamat"><button class="go" type="submit">→</button></form>
+  <button class="icon" id="newTab">＋</button><button class="icon" id="menuBtn">⋮</button>
 </header>
-
 <section class="tabs" id="tabs"></section>
-
 <main>
-  <section id="homePage" class="home-page">
-    <div class="brand">WEB<span>BROWSER</span></div>
-    <p class="sub">Browser sederhana dengan tampilan seperti browser HP.</p>
-    <form id="searchForm" class="search-box">
-      <span>⌕</span><input id="searchInput" placeholder="Cari di web" autocomplete="off"><button>→</button>
-    </form>
-    <div class="quick">
-      <button data-url="https://www.google.com/">Google</button>
-      <button data-url="https://www.youtube.com/">YouTube</button>
-      <button data-url="https://www.facebook.com/">Facebook</button>
-      <button data-url="https://www.wikipedia.org/">Wikipedia</button>
-    </div>
-  </section>
-
-  <section id="browserPage" class="browser-page hidden">
-    <div class="frame-head"><span id="pageTitle">Halaman</span><button id="openDirect">Buka langsung ↗</button></div>
-    <iframe id="webview" title="Browser content" referrerpolicy="no-referrer"></iframe>
-    <div id="blocked" class="blocked hidden">
-      <div class="blocked-icon">🌐</div>
-      <h2>Halaman tidak dapat ditampilkan di sini</h2>
-      <p>Situs ini mungkin melarang tampilan melalui iframe. Anda tetap dapat membukanya langsung di browser HP.</p>
-      <button id="blockedOpen">Buka langsung</button>
-    </div>
-  </section>
+<section id="homePage" class="home-page">
+<div class="brand">WEB<span>BROWSER</span></div><p class="sub">Browser ringan dengan tampilan seperti browser HP.</p>
+<form id="searchForm" class="search-box"><span>⌕</span><input id="searchInput" placeholder="Cari di web" autocomplete="off"><button>→</button></form>
+<div class="quick"><button data-url="https://www.google.com/">Google</button><button data-url="https://www.youtube.com/">YouTube</button><button data-url="https://www.facebook.com/">Facebook</button><button data-url="https://www.wikipedia.org/">Wikipedia</button></div>
+</section>
+<section id="browserPage" class="browser-page hidden">
+<div class="frame-head"><span id="pageTitle">Halaman</span><button id="openDirect">Buka langsung ↗</button></div>
+<iframe id="webview" title="Browser content" referrerpolicy="no-referrer"></iframe>
+<div id="blocked" class="blocked hidden"><div class="blocked-icon">🌐</div><h2>Halaman tidak dapat ditampilkan di sini</h2><p>Situs ini mungkin melarang iframe. Gunakan tombol di bawah untuk membukanya langsung.</p><button id="blockedOpen">Buka langsung</button></div>
+</section>
 </main>
-
-<div id="menu" class="menu hidden">
-  <button id="copyUrl">Salin URL</button>
-  <button id="desktopMode">Mode desktop</button>
-  <button id="historyBtn">Riwayat</button>
-  <button id="clearHistory">Hapus riwayat</button>
-  <button id="homeMenu">Beranda</button>
-</div>
-
-<div id="historyPanel" class="panel hidden">
-  <div class="panel-title"><b>Riwayat</b><button id="closeHistory">×</button></div>
-  <div id="historyList"></div>
-</div>
-
+<div id="menu" class="menu hidden"><button id="copyUrl">Salin URL</button><button id="desktopMode">Mode desktop</button><button id="historyBtn">Riwayat</button><button id="clearHistory">Hapus riwayat</button><button id="installBtn" class="hidden">Pasang aplikasi</button><button id="homeMenu">Beranda</button></div>
+<div id="historyPanel" class="panel hidden"><div class="panel-title"><b>Riwayat</b><button id="closeHistory">×</button></div><div id="historyList"></div></div>
 <script src="app.js"></script>
 </body>
 </html>
