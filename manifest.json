@@ -1,1 +1,1 @@
-{"name":"Web Browser","short_name":"Browser","start_url":"./","display":"standalone","background_color":"#0b0f14","theme_color":"#0b0f14","description":"Browser ringan dengan tampilan seperti browser HP.","icons":[]}
+{"name":"Browser Direct","short_name":"Browser","start_url":"/","display":"standalone","background_color":"#202124","theme_color":"#202124","description":"Launcher untuk membuka website langsung di browser tanpa iframe."}
