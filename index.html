@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web Browser</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="browser">
+    <div class="tabs">
+      <button class="tab active"><span class="tab-icon">🌐</span><span>New Tab</span><button class="tab-close">×</button></button>
+      <button class="new-tab" id="newTab" title="Tab baru">+</button>
+    </div>
+    <div class="toolbar">
+      <button class="tool" id="back" title="Kembali">‹</button>
+      <button class="tool" id="forward" title="Maju">›</button>
+      <button class="tool" id="reload" title="Muat ulang">↻</button>
+      <button class="tool home" id="home" title="Beranda">⌂</button>
+      <div class="address-wrap">
+        <span class="site-icon">🔒</span>
+        <input id="address" type="text" autocomplete="off" spellcheck="false" placeholder="Cari atau masukkan alamat web">
+        <button id="go" class="go-btn">→</button>
+      </div>
+      <button class="tool" id="openExternal" title="Buka di tab baru">↗</button>
+      <button class="tool menu" id="menu" title="Menu">⋮</button>
+    </div>
+  </header>
+
+  <main class="viewport">
+    <section class="home-screen" id="homeScreen">
+      <div class="brand">
+        <div class="brand-mark">🌐</div>
+        <h1>Web Browser</h1>
+        <p>Jelajahi web dari satu tempat.</p>
+      </div>
+      <form id="searchForm" class="search-box">
+        <span>🔍</span>
+        <input id="homeSearch" placeholder="Cari di web atau masukkan URL" autocomplete="off">
+        <button type="submit">Cari</button>
+      </form>
+      <div class="quick-links">
+        <button data-url="https://example.com">Example</button>
+        <button data-url="https://wikipedia.org">Wikipedia</button>
+        <button data-url="https://github.com">GitHub</button>
+      </div>
+      <p class="notice">Catatan: beberapa situs seperti Google, Facebook, atau layanan perbankan dapat menolak ditampilkan di dalam frame. Gunakan tombol ↗ untuk membukanya langsung.</p>
+    </section>
+    <iframe id="webview" title="Web Browser View" allow="fullscreen; autoplay; clipboard-read; clipboard-write"></iframe>
+    <div id="errorBox" class="error-box hidden">
+      <div class="error-icon">⚠</div>
+      <h2>Halaman tidak dapat ditampilkan</h2>
+      <p>Situs tujuan mungkin melarang ditampilkan di dalam browser ini.</p>
+      <button id="retry">Coba lagi</button>
+      <button id="external">Buka situs langsung ↗</button>
+    </div>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
