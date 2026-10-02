@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "Solitaire Pattern Recorder V2",
+  "version": "2.0.0",
+  "description": "Merekam dan mengenali pola posisi permainan Solitaire dari browser.",
+  "permissions": ["storage", "tabs", "activeTab", "notifications"],
+  "host_permissions": ["https://1xlite-69967.pro/*"],
+  "action": {"default_title": "Solitaire Pattern Recorder","default_popup": "popup.html"},
+  "background": {"service_worker": "background.js"},
+  "content_scripts": [{"matches":["https://1xlite-69967.pro/*"],"js":["content.js"],"run_at":"document_idle"}]
+}
