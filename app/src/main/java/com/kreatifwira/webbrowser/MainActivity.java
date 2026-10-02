@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.view.*;
 import android.view.inputmethod.EditorInfo;
 import android.webkit.*;
+import androidx.browser.customtabs.CustomTabsIntent;
 import android.widget.*;
 import java.util.*;
 
@@ -212,7 +213,13 @@ public class MainActivity extends Activity {
             else q="https://"+q;
         }
         address.setText(q);
-        web.loadUrl(q);
+        try {
+            CustomTabsIntent intent = new CustomTabsIntent.Builder().build();
+            intent.launchUrl(this, Uri.parse(q));
+        } catch (Exception e) {
+            try { startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(q))); }
+            catch (Exception ignored) { showError("Browser Chrome tidak tersedia."); }
+        }
     }
 
     void showMenu(View anchor) {
