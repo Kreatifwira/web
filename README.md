@@ -1,24 +1,27 @@
-# Browser Pattern Recorder
+# Solitaire Pattern Recorder V2
 
-Aplikasi desktop Windows berbasis Electron.
-
-## Menjalankan
-1. Install Node.js LTS.
-2. Di folder repository jalankan:
-   npm install
-   npm start
-
-## Membuat EXE
-   npm run build
-
-Installer Windows dibuat di folder dist.
+Versi browser extension untuk Chrome/Edge.
 
 ## Fitur
-- Browser Chromium internal.
-- Membuka URL dan navigasi.
-- RECORD POLA: mengambil snapshot tampilan.
-- SIMPAN: menyimpan fingerprint lokal.
-- CEK POLA: mencari fingerprint yang sama.
-- Database pola tersimpan di localStorage aplikasi.
+- Berjalan langsung di browser.
+- Login dilakukan sendiri oleh pengguna; extension tidak menerima password atau OTP.
+- RECORD POLA menangkap keadaan visual halaman.
+- SIMPAN POLA menyimpan hash lokal.
+- CEK POLA membandingkan pola sekarang dengan rekaman lama.
+- Toleransi kemiripan 70–98%.
+- Notifikasi browser saat pola cocok.
+- Tidak melakukan auto-click atau auto-play.
 
-Versi awal menggunakan fingerprint visual sederhana. Ini fondasi untuk pengenal susunan kartu yang lebih akurat. Tidak ada auto-click atau auto-play.
+## Instalasi
+1. Buka Chrome atau Edge.
+2. Chrome: chrome://extensions
+3. Edge: edge://extensions
+4. Aktifkan Developer mode / Mode pengembang.
+5. Pilih Load unpacked / Muat yang belum dikemas.
+6. Pilih folder repository ini.
+7. Buka https://1xlite-69967.pro/id/games/solitaire.
+8. Login sendiri jika diperlukan.
+9. Klik ikon Solitaire Pattern Recorder V2.
+
+## Catatan
+V2 menggunakan perceptual-style binary hash dari area layar. Ini lebih toleran daripada fingerprint PNG persis, tetapi belum mengenali nilai kartu secara semantik. Tahap berikutnya dapat dibuat menjadi pengenal posisi dan identitas kartu.
