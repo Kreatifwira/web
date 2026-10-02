@@ -4,9 +4,33 @@
   "version": "5.0.0",
   "description": "Merekam deal Solitaire, menyimpan langkah, mendeteksi deal yang pernah direkam, dan menawarkan replay.",
   "minimum_chrome_version": "120",
-  "permissions": ["storage","tabs","activeTab","notifications","debugger"],
-  "host_permissions": ["https://1xlite-69967.pro/*"],
-  "action": {"default_title":"Solitaire Recorder V5","default_popup":"v5/popup.html"},
-  "background": {"service_worker":"v5/background.js"},
-  "content_scripts": [{"matches":["https://1xlite-69967.pro/*"],"js":["v5/content.js"],"run_at":"document_idle"}]
+  "permissions": [
+    "storage",
+    "tabs",
+    "activeTab",
+    "notifications",
+    "debugger"
+  ],
+  "host_permissions": [
+    "https://1xlite-69967.pro/*"
+  ],
+  "action": {
+    "default_title": "Solitaire Recorder V5",
+    "default_popup": "v5/popup.html"
+  },
+  "background": {
+    "service_worker": "v5/background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://1xlite-69967.pro/*"
+      ],
+      "js": [
+        "v5/content.js"
+      ],
+      "run_at": "document_idle",
+      "all_frames": true
+    }
+  ]
 }
